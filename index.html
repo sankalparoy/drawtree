@@ -6,7 +6,7 @@
 <button onclick="drawTree()">Draw</button>
 <br/>
 
-<canvas id="myCanvas" width="1000" height="600"
+<canvas id="myCanvas" width="600" height="600"
 style="border:1px solid #d3d3d3;">
 Your browser does not support the canvas element.
 </canvas>
@@ -16,6 +16,12 @@ function drawTree(){
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+	
+const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+ctx.canvas.width  = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
+	
 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
