@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<label>Enter Array:[<input id="arr"/>]</label>
+<button onclick="drawTree()">Draw</button>
+
+<canvas id="myCanvas" width="500" height="500"
+style="border:1px solid #d3d3d3;">
+Your browser does not support the canvas element.
+</canvas>
+
+<script>
+function drawTree(){
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+var h=canvas.height;
+var w=canvas.width;
+
+var h_padding=h*0.1;
+var w_padding=w*0.1;
+
+var h_start=h*0.1;
+var h_end=h*0.9;
+var w_start=w*0.1;
+var w_end=w*0.9;
+
+var pos0_x=w*0.5;
+var pos0_y=h_start;
+
+//ctx.moveTo(10,0);
+var arr=[10,20,30,40,-1,-1,-1,50,80,60,70,90,100,-1,-1,-1,-1,-1,-1,-1,-1];
+if(document.getElementById("arr").value!=""){
+	var str1=document.getElementById("arr").value;
+    arr=str1.split(",");
+    //alert(arr)
+    //return;
+}
+var n=arr.length;
+
+var q=[];
+q.push(arr[0]);
+
+var posQ=[];
+posQ.push(0);
+
+var i=1;
+var l=0;
+while(q.length>0){
+	l++;
+    var qlen=q.length;
+	for(j=0;j<qlen;j++){
+        var rem=q.shift();
+        var pos=posQ.shift();
+        //console.log(rem+":"+l+","+pos+"#");
+        if(arr[i]!=-1){
+            q.push(arr[i]);
+            //posQ.push(pos-1);
+            posQ.push(pos-1);
+        }
+        i++;
+        if(arr[i]!=-1){
+            q.push(arr[i]);
+            posQ.push(pos+1);
+        }
+        i++;
+    }
+}
+//alert(l);
+
+
+//var levels=Math.floor(Math.log2(n));
+var levels=l;
+//alert(levels);
+
+var max_leaves=Math.pow(2,levels-1);
+//alert(max_leaves);
+var x_step=w*0.8/max_leaves;
+var y_step=h/levels;
+
+
+
+q=[];
+q.push(arr[0]);
+
+posQ=[];
+posQ.push(0);
+
+i=1;
+l=0;
+while(q.length>0){
+	l++;
+    var qlen=q.length;
+	for(j=0;j<qlen;j++){
+        var rem=q.shift();
+        var pos=posQ.shift();
+        
+        //console.log(rem+":"+l+","+pos+"#");
+        
+        x_pos=pos0_x+pos*x_step;
+        y_pos=pos0_y+(l-1)*y_step;
+        ctx.moveTo(x_pos,y_pos);
+        console.log(rem+":"+l+","+pos+"#");
+        console.log(x_pos+","+y_pos);
+        ctx.fillText(rem,x_pos,y_pos);
+        ctx.moveTo(x_pos+5,y_pos-5);
+        ctx.strokeStyle = "green";
+        ctx.beginPath();
+		ctx.arc(x_pos+5, y_pos-5, 15, 0, 2*Math.PI);
+        ctx.moveTo(x_pos,y_pos);
+        ctx.stroke();
+        
+        
+        if(arr[i]!=-1){
+            q.push(arr[i]);
+            left_pos=pos-((max_leaves/4)/l);
+            posQ.push(left_pos);
+            
+            next_x_pos=pos0_x+left_pos*x_step;
+        	next_y_pos=pos0_y+l*y_step;
+            ctx.lineTo(next_x_pos,next_y_pos);
+            ctx.stroke();
+            ctx.moveTo(x_pos,y_pos);
+        }
+        i++;
+        if(arr[i]!=-1){
+            q.push(arr[i]);
+            right_pos=pos+((max_leaves/4)/l);
+            posQ.push(right_pos);
+            
+            next_x_pos=pos0_x+right_pos*x_step;
+        	next_y_pos=pos0_y+l*y_step;
+            ctx.lineTo(next_x_pos,next_y_pos);
+            ctx.stroke();
+            ctx.moveTo(x_pos,y_pos);
+        }
+        i++;
+    }
+}
+
+
+//while(q.length>0){
+	//int rem=q.shift();
+//}
+
+q.push(arr[0]);
+
+
+//ctx.fillText("1",100,100);
+//ctx.arc(100, 100, 15, 0, 2*Math.PI);
+//ctx.lineTo(200,100);
+ctx.stroke();
+}
+</script>
+
+</body>
+</html>
